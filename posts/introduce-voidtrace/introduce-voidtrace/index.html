@@ -1,31 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
 
-
-
-
-
-
-
-<html
-  class="not-ready lg:text-base"
-  style="--bg:#faf8f1"
-  lang="zh-CN"
-  dir="ltr"
-><head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-  />
-
-  
-  <title>Voidtrace在内核态进行用户态无痕Trace - Zepp7289</title>
-
-  
-  <meta name="theme-color" />
-
-  <meta name="description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Voidtrace在内核态进行用户态无痕Trace | Zepp7289</title>
+<meta name="keywords" content="">
+<meta name="description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备
 
 	
@@ -64,163 +46,192 @@ VoidTrace解决了什么问题
 VoidTrace和其他QBDI-like的trace有什么区别
 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。
 ARM64单步原理
-ARM64 上需要几个部分配合：" />
-  <meta name="author" content="Zepp7289" /><link
-    rel="preload stylesheet"
-    as="style"
-    href="/main.min.8b1453450c536f5df9a4c754915de032624aa94d1d557d984b6bf98d6cc10155.css"
-    integrity="sha256-ixRTRQxTb135pMdUkV3gMmJKqU0dVX2YS2v5jWzBAVU="
-    crossorigin="anonymous"
-  />
+ARM64 上需要几个部分配合：">
+<meta name="author" content="">
+<link rel="canonical" href="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.2fd9135862a3da866393a267370bb97cd812193a02eb63558b88b00f30ec3648.css" integrity="sha256-L9kTWGKj2oZjk6JnNwu5fNgSGToC62NVi4iwDzDsNkg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://zepp7289.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://zepp7289.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://zepp7289.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://zepp7289.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://zepp7289.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
 
-  
-  <link rel="preload" as="image" href="https://zepp7289.github.io/theme.png" />
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
 
-  
+            .list {
+                background: var(--theme);
+            }
 
-  
+            .toc {
+                background: var(--entry);
+            }
+        }
 
-  <script
-    defer
-    src="https://zepp7289.github.io/highlight.min.js"
-    onload="hljs.initHighlightingOnLoad()"
-  ></script>
-
-  
-  <link
-    rel="icon"
-    href="https://zepp7289.github.io/favicon.ico"
-  />
-  <link
-    rel="apple-touch-icon"
-    href="https://zepp7289.github.io/apple-touch-icon.png"
-  />
-
-  <meta name="generator" content="Hugo 0.170.0">
-	<meta itemprop="name" content="Voidtrace在内核态进行用户态无痕Trace">
-	<meta itemprop="description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
-适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
-为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
-“Never wrestle with pigs. You both get dirty and the pigs like it.”
-Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。
-但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
-VoidTrace解决了什么问题 目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。
-VoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。
-ARM64单步原理 ARM64 上需要几个部分配合：">
-	<meta itemprop="datePublished" content="2026-11-17T09:16:51+08:00">
-	<meta itemprop="dateModified" content="2026-11-17T09:16:51+08:00">
-	<meta itemprop="wordCount" content="779"><meta property="og:url" content="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/">
-	<meta property="og:site_name" content="Zepp7289">
-	<meta property="og:title" content="Voidtrace在内核态进行用户态无痕Trace">
-	<meta property="og:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
-适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
-为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
-“Never wrestle with pigs. You both get dirty and the pigs like it.”
-Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。
-但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
-VoidTrace解决了什么问题 目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。
-VoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。
-ARM64单步原理 ARM64 上需要几个部分配合：">
-	<meta property="og:locale" content="zh_CN">
-	<meta property="og:type" content="article">
-		<meta property="article:section" content="posts">
-		<meta property="article:published_time" content="2026-11-17T09:16:51+08:00">
-		<meta property="article:modified_time" content="2026-11-17T09:16:51+08:00">
-
-	<meta name="twitter:card" content="summary">
-	<meta name="twitter:title" content="Voidtrace在内核态进行用户态无痕Trace">
-	<meta name="twitter:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
-适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
-为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
-“Never wrestle with pigs. You both get dirty and the pigs like it.”
-Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。
-但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
-VoidTrace解决了什么问题 目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。
-VoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。
-ARM64单步原理 ARM64 上需要几个部分配合：">
-
-  <link rel="canonical" href="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/" />
-</head>
-<body
-    class="bg-(--bg) text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"
-  ><header
-  class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"
->
-  <div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto">
-    <a
-      class="-translate-y-[1px] text-2xl font-medium"
-      href="https://zepp7289.github.io/"
-      >Zepp7289</a
-    >
-    <div
-      class="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]"
-      role="button"
-      aria-label="Dark"
-    ></div>
-  </div>
-
-  <div
-    class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8"
-    role="button"
-    aria-label="Menu"
-  ></div>
-
-  <script>
-    
-    const htmlClass = document.documentElement.classList;
-    setTimeout(() => {
-      htmlClass.remove('not-ready');
-    }, 10);
-
-    
-    const btnMenu = document.querySelector('.btn-menu');
-    btnMenu.addEventListener('click', () => {
-      htmlClass.toggle('open');
-    });
-
-    
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    const lightBg = '#faf8f1'.replace(/"/g, '');
-    const setDark = (isDark) => {
-      metaTheme.setAttribute('content', isDark ? "rgb(0 0 0 / 85%)" : lightBg);
-      htmlClass[isDark ? 'add' : 'remove']('dark');
-      localStorage.setItem('dark', isDark);
-    };
-
-    
-    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    if (htmlClass.contains('dark')) {
-      setDark(true);
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
     } else {
-      const darkVal = localStorage.getItem('dark');
-      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+        document.querySelector("html").dataset.theme = 'light';
     }
 
-    
-    darkScheme.addEventListener('change', (event) => {
-      setDark(event.matches);
-    });
+</script><meta property="og:url" content="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/">
+  <meta property="og:site_name" content="Zepp7289">
+  <meta property="og:title" content="Voidtrace在内核态进行用户态无痕Trace">
+  <meta property="og:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
+适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
+为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
+“Never wrestle with pigs. You both get dirty and the pigs like it.”
+Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。
+但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
+VoidTrace解决了什么问题 目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。
+VoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。
+ARM64单步原理 ARM64 上需要几个部分配合：">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-11-17T09:16:51+08:00">
+    <meta property="article:modified_time" content="2026-11-17T09:16:51+08:00">
 
-    
-    const btnDark = document.querySelector('.btn-dark');
-    btnDark.addEventListener('click', () => {
-      setDark(localStorage.getItem('dark') !== 'true');
-    });
-  </script>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Voidtrace在内核态进行用户态无痕Trace">
+  <meta name="twitter:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
+适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
+为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
+“Never wrestle with pigs. You both get dirty and the pigs like it.”
+Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。
+但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
+VoidTrace解决了什么问题 目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。
+VoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。
+ARM64单步原理 ARM64 上需要几个部分配合：">
 
-  <div
-    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"
-  >
-  </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://zepp7289.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Voidtrace在内核态进行用户态无痕Trace",
+      "item": "https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Voidtrace在内核态进行用户态无痕Trace",
+  "name": "Voidtrace在内核态进行用户态无痕Trace",
+  "description": "VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。\n适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。\n为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。\n\u0026ldquo;Never wrestle with pigs. You both get dirty and the pigs like it.\u0026rdquo;\nLinux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。\n但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。\nVoidTrace解决了什么问题 目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。\nVoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。\nARM64单步原理 ARM64 上需要几个部分配合：\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。\n适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。\n为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。\n“Never wrestle with pigs. You both get dirty and the pigs like it.”\nLinux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。\n但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。\nVoidTrace解决了什么问题 目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。\nVoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。\nARM64单步原理 ARM64 上需要几个部分配合：\nMDSCR_EL1.SS：Monitor Debug System Control Register - Software Step，作为软件单步功能的开关。只有当 MDSCR_EL1.SS == 1 时，硬件的软件单步逻辑才会生效；如果 MDSCR_EL1.SS == 0，即便 PSTATE.SS 为 1，也不会因为单步机制触发软件步进异常。 PSTATE.SS：Processor State - Software Step，保存了处理器当前的执行状态，置位后，异常返回到用户态时，执行一条指令就触发一次 Software Step 异常，重新陷入内核 内核侧由 arch/arm64/kernel/debug-monitors.c 的 step handler 处理异常，开关函数是 user_enable_single_step() / user_disable_single_step() 传统流程中这套机制由 ptrace 驱动：tracer 调 ptrace(PTRACE_SINGLESTEP) → 内核 user_enable_single_step() → 单步异常 → 内核给 tracer 发 SIGTRAP。单步的执行在内核，但控制和通知都要经过用户空间的 tracer，同时暴露出 TracerPid、SIGTRAP、/proc/self/status 等检测点。\nVoidTrace 的做法是不依赖 ptrace，直接在内核里调用 user_enable_single_step、设置 PSTATE.SS，让单步异常循环发生，同时压制信号，用户空间不可见。\n硬件断点进行点火 trace 在目标函数入口精确切入，这一步称为点火。整个流程由 mmap hook 驱动：\nafter_mmap 中对目标 uid 的 mmap 做特征指纹匹配（以 length == 0x3110000 \u0026\u0026 offset == 0x0 识别目标 so 的代码段映射），命中后记录基址 segment_addr 用 register_wide_hw_breakpoint() 在 segment_addr + segment_func_offset（目标函数入口）挂全 CPU 的执行型硬件断点（HW_BREAKPOINT_X，长度 4 字节），硬件断点不修改内存页，不留修改痕迹 注册前把 selinux_state-\u003eenforcing 置 0 绕过 SELinux 限制，注册完恢复 hook 内核的 perf_bp_event()：断点命中时比对 regs-\u003epc，等于目标函数入口即点火——记录 trace_task = current，把初始寄存器快照写入缓冲区，再通过 task_work_add() 调度 trace_start_work 在返回用户态前打开落盘文件、创建 watchdog 内核异常无限续杯顺风车 以 alioth 内核 4.19.157 源码（Xiaomi_Kernel_OpenSource-alioth-r-oss）为准，两类调试异常在内核里的完整路径如下。\n单步异常（ESR_EL1.EC = 0b1100110，DBG_ESR_EVT_HWSS）：\n用户态执行一条指令，触发 Software Step 异常 → vectors → el0_dbg arch/arm64/kernel/entry.S:851 → do_debug_exception() arch/arm64/mm/fault.c:910 inf = debug_fault_info[DBG_ESR_EVT(esr)] 按 ESR_EL1.EC 字段分发 → single_step_handler() debug-monitors.c:231 （debug_traps_init() 经 hook_debug_fault_code(DBG_ESR_EVT_HWSS, ...) 注册） → reinstall_suspended_bps(regs) hw_breakpoint.c:850 ★ VoidTrace after-hook 点 user_mode 分支：bps_disabled / wps_disabled 时 toggle_bp_registers() 把挂起的断点控制位重新写回 DBGBCR_ELx / DBGWCR_ELx → 返回值被改写为 0 → single_step_handler 直接 return 0 → enable_da_f / ct_user_exit → ret_to_user → kernel_exit → ERET 单步异常进入内核后，single_step_handler() 的第一条语句就是调用 reinstall_suspended_bps(regs)，把之前被挂起的硬件断点重新装回 DBGBCR_ELx/DBGWCR_ELx 控制寄存器。\nVoidTrace hook 了这个函数的 after：只要 current == trace_task，就\nuser_enable_single_step_ptr(current); regs-\u003epstate |= DBG_SPSR_SS; args-\u003eret = 0; // 覆盖原函数返回值 即每处理完一次单步异常，把 PSTATE.SS 再置回去，eret 回用户态执行下一条指令，再次异常，循环往复，这就是\"无限续杯\"。\n整个单步循环复用了内核原有的异常处理流程：模块自身不注册异常 handler，不修改异常向量，只在内核必经的函数上挂钩子，这就是\"顺风车\"。\n同时每次单步异常都是一个采样点：在同一个 hook 里判断 regs-\u003epc 是否在 trace 区间内，是则 trace_steps++ 并把寄存器快照写入缓冲区。\nSVC压制防止进程感知 单步执行经过 SVC（系统调用）时，syscall-exit 路径同样会触发单步异常。此时进程被设置了 TIF_SINGLESTEP 却没有 ptracer，内核 debug-monitors 的处理是直接\nforce_sig_info(SIGTRAP /* sig 5 */, info /* si_code = 0 */, trace_task); 进程收到一个 SIGTRAP，默认动作是 core dump；即使进程捕获了信号，反调试逻辑也会检测到。\n所以我们 hook force_sig_info()：\nif (task == trace_task \u0026\u0026 sig == 5 \u0026\u0026 info-\u003esi_code == 0) { args-\u003eskip_origin = true; // 不执行原函数，信号不会发出 args-\u003eret = 0; } 只匹配 sig == 5 \u0026\u0026 si_code == 0（SI_USER，内核发出的 SIGTRAP），只吞掉自己单步产生的信号，不影响进程正常信号处理。\n至此，进程正常运行，单步循环只在内核里发生，用户空间不可见。\n异常里面的睡眠 trace 流程里几个的重活，打开落盘文件、写文件、创建/释放 PMU watchdog都是可睡眠的操作：filp_open 要走 VFS 路径解析，可能从 UFS/eMMC 读 inode 块；kernel_write 走 ext4/f2fs 日志事务和脏页回写，内部是 mutex 和等待队列；perf_event_create_kernel_counter 要拿 perf context 的 mutex。而触发它们的时机恰恰全落在不能睡眠的上下文\n为什么用 task_work_add task_work_add_ptr(current, \u0026trace_flush_work, true); task_work_add(task, work, notify=true) 把 callback_head 压入 task-\u003etask_works 链表并置 TIF_NOTIFY_RESUME（kernel/task_work.c:28-40）。此后异常返回路径必经的 ret_to_user（entry.S:931）检查到该 flag，走 work_pending → do_notify_resume()（signal.c:915）→ tracehook_notify_resume() → task_work_run() 执行回调。它同时满足几个条件：\n进程上下文可睡眠：do_notify_resume 里 local_daif_restore(DAIF_PROCCTX)（signal.c:935）重新打开中断，调度器可用，filp_open/kernel_write/perf mutex 这些会睡眠的操作全部合法。 天然阻塞：ERET 之前，回调在\"下一条用户指令执行前\"跑完，flush 完再继续单步，不会造成顺序错乱。 上下文正确：current == trace_task 自己执行。filp_open 的路径解析和权限检查用的是 trace_task 的 fs_struct/cred，换成别的线程执行语义就错了；同时 trace 缓冲区是\"异常上下文只写、task_work 只读\"的单线程流水，天然无需加锁。 原子区间跳过 ARM64 用 LL/SC（LDXR/STXR 独占加载/存储对）实现原子操作和锁，依赖硅片上的硬件监视器 exclusive monitor：LDXR 设置监视状态，STXR 验证监视状态并返回是否成功。\n单步会破坏这个机制：LDXR 后单步异常陷入内核再返回，监视状态被破坏，STXR 永远失败，重试循环永不退出，进程卡死，这是 ARM 架构手册明文规定的行为：\n（1）异常返回会清除 Exclusives monitor。D1.4.4《Exception return》在异常返回的操作序列中明确列出（D1-7212 页）：\nThe local Exclusives monitor for the PE executing the Exception return instruction is cleared. It is IMPLEMENTATION DEFINED whether clearing the local Exclusives monitor also clears the global Exclusives monitor.\nB2.12.4《Context switch support》给出同一结论（B2-340 页）：\nAn exception return clears the local monitor. As a result, performing a CLREX instruction as part of a context switch is not required in most situations.\n这也是内核上下文切换大多不必显式执行 CLREX 的原因。\nVoidTrace 的单步循环恰好是\"LDXR → 单步异常进内核 → ERET → STXR\"：每次重试都在区间内注入一对 exception/exception return，同时踩中两条禁区，STXR 每次都失败，重试循环退化为死循环。\nVoidTrace单步异常时读回 regs-\u003epc 处的指令，用 is_ldx_family() 判断：\n(insn \u0026 0x3FDF0000) == 0x085F0000 // LDXR 族独占加载 命中就暂时关闭单步（user_disable_single_step + 清 PSTATE.SS），让 LL/SC 整段原子区间不被打断地执行完，避免死循环。\n重新接管用 PMU watchdog：perf_event_create_kernel_counter() 创建绑定 trace_task 的 RAW 性能计数INST_RETIRED事件（config = 0x08，sample_period = 32）。关闭单步的同时通过 task_work_add 打开 watchdog，此后执行 32 条指令 PMU 计数溢出，overflow handler 里恢复单步：\nuser_enable_single_step_ptr(current); _task_pt_reg(current)-\u003epstate |= DBG_SPSR_SS; perf_event_disable_inatomic_ptr(event); // 自禁用，下次让权时再启用 即单步和 watchdog 交替：正常区域逐条单步，原子区间放行 32 条指令由 PMU 计数，之后恢复单步。代价是原子区间内多丢 32 条指令的 trace，并且由于PMU事件窗口延迟，可能会在原子区间出口后再丢失数个指令。\n手册对 LDXR 与 STXR 之间的代码要求是\"越紧越好\"，并给出了量化建议（B2.12.5，B2-342 页）：\nThe Exclusives monitor can be cleared at any time without an application-related cause, provided that such clearing is not systematically repeated so as to prevent the forward progress in finite time of at least one of the threads that is accessing the Exclusives monitor.\nImplementations can benefit from keeping the LoadExcl and StoreExcl operations close together in a single thread of execution. This minimizes the likelihood of the Exclusives monitor state being cleared between the LoadExcl instruction and the StoreExcl instruction. Therefore, for best performance, Arm strongly recommends a limit of 128 bytes between LoadExcl and StoreExcl instructions in a single thread of execution.\n这就是PMU事件为什么选择32条的由来，编译器会严格遵守手册，使得原子区间不超过32条指令。\nARM64同时存在数个STX相关事件，但是和CPU架构严格相关，故在此选择更为通用的INST_RETIRED。\n通用寄存器和浮点寄存器缓冲区记录 每次单步异常都是一个采样点，pc 在 trace 区间内时：\ntrace_steps++; memcpy((char *)tmp_buf + tmp_cur_size, \u0026regs-\u003euser_regs, sizeof(regs-\u003euser_regs)); fpsimd_save_state_ptr((struct user_fpsimd_state *) ((char *)tmp_buf + tmp_cur_size + sizeof(regs-\u003euser_regs))); tmp_cur_size += sizeof(regs-\u003euser_regs) + sizeof(struct user_fpsimd_state); regs-\u003euser_regs 即 user_pt_regs：x0–x30 通用寄存器、sp、pc、pstate，一条指令的完整上下文 fpsimd_save_state() 保存当前 CPU 的 NEON/浮点寄存器（user_fpsimd_state，v0–v31 + fpsr/fpcr），OLLVM/VMP 大量使用向量指令，浮点寄存器里有中间值 缓冲区是 vmalloc 的 100MB 内存（tmp_buf），只写内存不落盘，减少单步路径上的开销 缓冲区将满时通过 task_work_add 调度 trace_flush_work 做一次中间落盘。\n缓冲区数据落盘 打开：点火时的 trace_start_fn 用 filp_open 打开 /data/data//files/trace.bin，放在 app 私有目录避免被扫描。flag 带 O_KERNEL_LARGEFILE（0400000，arm64 上真正的 O_LARGEFILE），内核 filp_open 不经过 glibc，不加这个位超过 2GB 会返回 -EFBIG 写入：统一用 kernel_write() 顺序写入，flush work 和 stop work 把 tmp_buf 中积累的数据写入并复位游标 停止条件：pc 到达 segment_func_offset_next（trace 区间出口），或 trace_steps \u003e= max_steps（1 \u003c\u003c 24）。停止时 trace_stop_fn 写完残余数据、perf_event_release_kernel 释放 watchdog、filp_close 关闭文件 最终产物是一份按指令粒度排列的二进制流，每条记录为 user_pt_regs + user_fpsimd_state，配合 so 基址可以离线还原出完整的指令级执行流。\nVoidTrace存在的缺点 trace 时执行速度会比正常执行慢上好几个数量级，这是无法解决的弊端，也是检测的最强手段。\nTODO 实现trace压缩存储\n实现trace适配IDA时间调试插件，在IDA直接可见执行流\n实现一个GUI解析器，解析trace\n实现多线程trace\n",
+  "wordCount" : "779",
+  "inLanguage": "en",
+  "datePublished": "2026-11-17T09:16:51+08:00",
+  "dateModified": "2026-11-17T09:16:51+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Zepp7289",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://zepp7289.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="https://zepp7289.github.io/" accesskey="h" title="Zepp7289 (Alt + H)">Zepp7289</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+        </ul>
+    </nav>
 </header>
-<main
-      class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-14 pb-16"
-    ><article>
-  <header class="mb-14">
-    <h1 class="my-0! pb-2.5">Voidtrace在内核态进行用户态无痕Trace</h1><div class="text-xs antialiased opacity-60"><time>Nov 17, 2026</time></div></header>
+<main class="main">
 
-  <section><p><a href="https://github.com/Zepp7289/VoidTrace">VoidTrace</a> 是我基于 <a href="https://github.com/bmax121/KernelPatch">KernelPatch</a> 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。</p>
-<h2 id="适配设备">适配设备</h2>
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Voidtrace在内核态进行用户态无痕Trace
+    </h1>
+    <div class="post-meta">
+
+<span title='2026-11-17T09:16:51+08:00'>November 17, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content md-content"><p><a href="https://github.com/Zepp7289/VoidTrace">VoidTrace</a> 是我基于 <a href="https://github.com/bmax121/KernelPatch">KernelPatch</a> 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。</p>
+<h2 id="适配设备">适配设备<a hidden class="anchor" aria-hidden="true" href="#适配设备">#</a></h2>
 <table>
 	<thead>
 			<tr>
@@ -243,21 +254,21 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 			</tr>
 	</tbody>
 </table>
-<h2 id="项目背景">项目背景</h2>
-<h3 id="单步是什么">单步是什么</h3>
+<h2 id="项目背景">项目背景<a hidden class="anchor" aria-hidden="true" href="#项目背景">#</a></h2>
+<h3 id="单步是什么">单步是什么<a hidden class="anchor" aria-hidden="true" href="#单步是什么">#</a></h3>
 <p>单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。</p>
-<h3 id="为什么开发voidtrace">为什么开发VoidTrace</h3>
+<h3 id="为什么开发voidtrace">为什么开发VoidTrace<a hidden class="anchor" aria-hidden="true" href="#为什么开发voidtrace">#</a></h3>
 <p>用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。</p>
 <blockquote>
 <p><em>&ldquo;Never wrestle with pigs. You both get dirty and the pigs like it.&rdquo;</em></p>
 </blockquote>
 <p>Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以对抗不可避免地下沉到了内核。</p>
 <p>但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。</p>
-<h3 id="voidtrace解决了什么问题">VoidTrace解决了什么问题</h3>
+<h3 id="voidtrace解决了什么问题">VoidTrace解决了什么问题<a hidden class="anchor" aria-hidden="true" href="#voidtrace解决了什么问题">#</a></h3>
 <p>目前安全厂商最主要的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路，AI 结合 trace 可以极大提高分析效率。</p>
-<h3 id="voidtrace和其他qbdi-like的trace有什么区别">VoidTrace和其他QBDI-like的trace有什么区别</h3>
+<h3 id="voidtrace和其他qbdi-like的trace有什么区别">VoidTrace和其他QBDI-like的trace有什么区别<a hidden class="anchor" aria-hidden="true" href="#voidtrace和其他qbdi-like的trace有什么区别">#</a></h3>
 <p>QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度；VoidTrace 在内核空间，天然隔离。</p>
-<h3 id="arm64单步原理">ARM64单步原理</h3>
+<h3 id="arm64单步原理">ARM64单步原理<a hidden class="anchor" aria-hidden="true" href="#arm64单步原理">#</a></h3>
 <p>ARM64 上需要几个部分配合：</p>
 <ul>
 <li><code>MDSCR_EL1.SS</code>：Monitor Debug System Control Register - Software Step，作为软件单步功能的开关。只有当 <code>MDSCR_EL1.SS == 1</code> 时，硬件的软件单步逻辑才会生效；如果 <code>MDSCR_EL1.SS == 0</code>，即便 <code>PSTATE.SS</code> 为 <code>1</code>，也不会因为单步机制触发软件步进异常。</li>
@@ -266,7 +277,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 </ul>
 <p>传统流程中这套机制由 ptrace 驱动：tracer 调 <code>ptrace(PTRACE_SINGLESTEP)</code> → 内核 <code>user_enable_single_step()</code> → 单步异常 → 内核给 tracer 发 <code>SIGTRAP</code>。单步的执行在内核，但控制和通知都要经过用户空间的 tracer，同时暴露出 <code>TracerPid</code>、<code>SIGTRAP</code>、<code>/proc/self/status</code> 等检测点。</p>
 <p>VoidTrace 的做法是不依赖 ptrace，直接在内核里调用 <code>user_enable_single_step</code>、设置 <code>PSTATE.SS</code>，让单步异常循环发生，同时压制信号，用户空间不可见。</p>
-<h3 id="硬件断点进行点火">硬件断点进行点火</h3>
+<h3 id="硬件断点进行点火">硬件断点进行点火<a hidden class="anchor" aria-hidden="true" href="#硬件断点进行点火">#</a></h3>
 <p>trace 在目标函数入口精确切入，这一步称为点火。整个流程由 mmap hook 驱动：</p>
 <ol>
 <li><code>after_mmap</code> 中对目标 uid 的 mmap 做特征指纹匹配（以 <code>length == 0x3110000 &amp;&amp; offset == 0x0</code> 识别目标 so 的代码段映射），命中后记录基址 <code>segment_addr</code></li>
@@ -274,7 +285,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 <li>注册前把 <code>selinux_state-&gt;enforcing</code> 置 0 绕过 SELinux 限制，注册完恢复</li>
 <li>hook 内核的 <code>perf_bp_event()</code>：断点命中时比对 <code>regs-&gt;pc</code>，等于目标函数入口即点火——记录 <code>trace_task = current</code>，把初始寄存器快照写入缓冲区，再通过 <code>task_work_add()</code> 调度 <code>trace_start_work</code> 在返回用户态前打开落盘文件、创建 watchdog</li>
 </ol>
-<h3 id="内核异常无限续杯顺风车">内核异常无限续杯顺风车</h3>
+<h3 id="内核异常无限续杯顺风车">内核异常无限续杯顺风车<a hidden class="anchor" aria-hidden="true" href="#内核异常无限续杯顺风车">#</a></h3>
 <p>以 alioth 内核 4.19.157 源码（Xiaomi_Kernel_OpenSource-alioth-r-oss）为准，两类调试异常在内核里的完整路径如下。</p>
 <p>单步异常（ESR_EL1.EC = 0b1100110，<code>DBG_ESR_EVT_HWSS</code>）：</p>
 <pre tabindex="0"><code>用户态执行一条指令，触发 Software Step 异常
@@ -296,7 +307,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 </span></span></span></code></pre></div><p>即每处理完一次单步异常，把 <code>PSTATE.SS</code> 再置回去，eret 回用户态执行下一条指令，再次异常，循环往复，这就是&quot;无限续杯&quot;。</p>
 <p>整个单步循环复用了内核原有的异常处理流程：模块自身不注册异常 handler，不修改异常向量，只在内核必经的函数上挂钩子，这就是&quot;顺风车&quot;。</p>
 <p>同时每次单步异常都是一个采样点：在同一个 hook 里判断 <code>regs-&gt;pc</code> 是否在 trace 区间内，是则 <code>trace_steps++</code> 并把寄存器快照写入缓冲区。</p>
-<h3 id="svc压制防止进程感知">SVC压制防止进程感知</h3>
+<h3 id="svc压制防止进程感知">SVC压制防止进程感知<a hidden class="anchor" aria-hidden="true" href="#svc压制防止进程感知">#</a></h3>
 <p>单步执行经过 <code>SVC</code>（系统调用）时，syscall-exit 路径同样会触发单步异常。此时进程被设置了 TIF_SINGLESTEP 却没有 ptracer，内核 debug-monitors 的处理是直接</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">force_sig_info</span>(SIGTRAP <span style="color:#75715e">/* sig 5 */</span>, info <span style="color:#75715e">/* si_code = 0 */</span>, trace_task);
 </span></span></code></pre></div><p>进程收到一个 <code>SIGTRAP</code>，默认动作是 core dump；即使进程捕获了信号，反调试逻辑也会检测到。</p>
@@ -307,9 +318,9 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>只匹配 <code>sig == 5 &amp;&amp; si_code == 0</code>（SI_USER，内核发出的 SIGTRAP），只吞掉自己单步产生的信号，不影响进程正常信号处理。</p>
 <p>至此，进程正常运行，单步循环只在内核里发生，用户空间不可见。</p>
-<h3 id="异常里面的睡眠">异常里面的睡眠</h3>
+<h3 id="异常里面的睡眠">异常里面的睡眠<a hidden class="anchor" aria-hidden="true" href="#异常里面的睡眠">#</a></h3>
 <p>trace 流程里几个的重活，打开落盘文件、写文件、创建/释放 PMU watchdog都是可睡眠的操作：<code>filp_open</code> 要走 VFS 路径解析，可能从 UFS/eMMC 读 inode 块；<code>kernel_write</code> 走 ext4/f2fs 日志事务和脏页回写，内部是 mutex 和等待队列；<code>perf_event_create_kernel_counter</code> 要拿 perf context 的 mutex。而触发它们的时机恰恰全落在不能睡眠的上下文</p>
-<h4 id="为什么用-task_work_add">为什么用 task_work_add</h4>
+<h4 id="为什么用-task_work_add">为什么用 task_work_add<a hidden class="anchor" aria-hidden="true" href="#为什么用-task_work_add">#</a></h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">task_work_add_ptr</span>(current, <span style="color:#f92672">&amp;</span>trace_flush_work, true);
 </span></span></code></pre></div><p><code>task_work_add(task, work, notify=true)</code> 把 <code>callback_head</code> 压入 <code>task-&gt;task_works</code> 链表并置 <code>TIF_NOTIFY_RESUME</code>（kernel/task_work.c:28-40）。此后异常返回路径必经的 <code>ret_to_user</code>（entry.S:931）检查到该 flag，走 <code>work_pending</code> → <code>do_notify_resume()</code>（signal.c:915）→ <code>tracehook_notify_resume()</code> → <code>task_work_run()</code> 执行回调。它同时满足几个条件：</p>
 <ol>
@@ -317,7 +328,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 <li>天然阻塞：ERET 之前，回调在&quot;下一条用户指令执行前&quot;跑完，flush 完再继续单步，不会造成顺序错乱。</li>
 <li>上下文正确：<code>current == trace_task</code> 自己执行。<code>filp_open</code> 的路径解析和权限检查用的是 trace_task 的 <code>fs_struct</code>/<code>cred</code>，换成别的线程执行语义就错了；同时 trace 缓冲区是&quot;异常上下文只写、task_work 只读&quot;的单线程流水，天然无需加锁。</li>
 </ol>
-<h3 id="原子区间跳过">原子区间跳过</h3>
+<h3 id="原子区间跳过">原子区间跳过<a hidden class="anchor" aria-hidden="true" href="#原子区间跳过">#</a></h3>
 <p>ARM64 用 LL/SC（<code>LDXR</code>/<code>STXR</code> 独占加载/存储对）实现原子操作和锁，依赖硅片上的硬件监视器 exclusive monitor：<code>LDXR</code> 设置监视状态，<code>STXR</code> 验证监视状态并返回是否成功。</p>
 <p>单步会破坏这个机制：<code>LDXR</code> 后单步异常陷入内核再返回，监视状态被破坏，<code>STXR</code> 永远失败，重试循环永不退出，进程卡死，这是 ARM 架构手册明文规定的行为：</p>
 <p>（1）异常返回会清除 Exclusives monitor。D1.4.4《Exception return》在异常返回的操作序列中明确列出（D1-7212 页）：</p>
@@ -345,7 +356,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 </blockquote>
 <p>这就是PMU事件为什么选择32条的由来，编译器会严格遵守手册，使得原子区间不超过32条指令。</p>
 <p>ARM64同时存在数个STX相关事件，但是和CPU架构严格相关，故在此选择更为通用的INST_RETIRED。</p>
-<h3 id="通用寄存器和浮点寄存器缓冲区记录">通用寄存器和浮点寄存器缓冲区记录</h3>
+<h3 id="通用寄存器和浮点寄存器缓冲区记录">通用寄存器和浮点寄存器缓冲区记录<a hidden class="anchor" aria-hidden="true" href="#通用寄存器和浮点寄存器缓冲区记录">#</a></h3>
 <p>每次单步异常都是一个采样点，pc 在 trace 区间内时：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>trace_steps<span style="color:#f92672">++</span>;
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">memcpy</span>((<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)tmp_buf <span style="color:#f92672">+</span> tmp_cur_size, <span style="color:#f92672">&amp;</span>regs<span style="color:#f92672">-&gt;</span>user_regs, <span style="color:#66d9ef">sizeof</span>(regs<span style="color:#f92672">-&gt;</span>user_regs));
@@ -358,37 +369,127 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 <li>缓冲区是 <code>vmalloc</code> 的 100MB 内存（<code>tmp_buf</code>），只写内存不落盘，减少单步路径上的开销</li>
 </ul>
 <p>缓冲区将满时通过 <code>task_work_add</code> 调度 <code>trace_flush_work</code> 做一次中间落盘。</p>
-<h3 id="缓冲区数据落盘">缓冲区数据落盘</h3>
+<h3 id="缓冲区数据落盘">缓冲区数据落盘<a hidden class="anchor" aria-hidden="true" href="#缓冲区数据落盘">#</a></h3>
 <ul>
 <li><strong>打开</strong>：点火时的 <code>trace_start_fn</code> 用 <code>filp_open</code> 打开 <code>/data/data/&lt;app&gt;/files/trace.bin</code>，放在 app 私有目录避免被扫描。flag 带 <code>O_KERNEL_LARGEFILE</code>（<code>0400000</code>，arm64 上真正的 <code>O_LARGEFILE</code>），内核 <code>filp_open</code> 不经过 glibc，不加这个位超过 2GB 会返回 <code>-EFBIG</code></li>
 <li><strong>写入</strong>：统一用 <code>kernel_write()</code> 顺序写入，flush work 和 stop work 把 <code>tmp_buf</code> 中积累的数据写入并复位游标</li>
 <li><strong>停止条件</strong>：pc 到达 <code>segment_func_offset_next</code>（trace 区间出口），或 <code>trace_steps &gt;= max_steps</code>（<code>1 &lt;&lt; 24</code>）。停止时 <code>trace_stop_fn</code> 写完残余数据、<code>perf_event_release_kernel</code> 释放 watchdog、<code>filp_close</code> 关闭文件</li>
 </ul>
 <p>最终产物是一份按指令粒度排列的二进制流，每条记录为 <code>user_pt_regs + user_fpsimd_state</code>，配合 so 基址可以离线还原出完整的指令级执行流。</p>
-<h2 id="voidtrace存在的缺点">VoidTrace存在的缺点</h2>
+<h2 id="voidtrace存在的缺点">VoidTrace存在的缺点<a hidden class="anchor" aria-hidden="true" href="#voidtrace存在的缺点">#</a></h2>
 <p>trace 时执行速度会比正常执行慢上好几个数量级，这是无法解决的弊端，也是检测的最强手段。</p>
-<h2 id="todo">TODO</h2>
+<h2 id="todo">TODO<a hidden class="anchor" aria-hidden="true" href="#todo">#</a></h2>
 <p>实现trace压缩存储</p>
 <p>实现trace适配IDA时间调试插件，在IDA直接可见执行流</p>
 <p>实现一个GUI解析器，解析trace</p>
 <p>实现多线程trace</p>
-</section>
 
-  </article></main><footer
-  class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"
->
-  <div class="mr-auto">&copy;2026
-    <a class="link" href="https://zepp7289.github.io/">Zepp7289</a></div>
-  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
-    >powered by hugo️️</a
-  >️
-  <a
-    class="link"
-    href="https://github.com/nanxiaobei/hugo-paper"
-    rel="noopener"
-    target="_blank"
-    >hugo-paper</a
-  >
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://zepp7289.github.io/">Zepp7289</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
 </footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        
+        let menuScrollTimeout;
+        menu.addEventListener("scroll", function () {
+            clearTimeout(menuScrollTimeout);
+            menuScrollTimeout = setTimeout(function () {
+                localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+            }, 150);
+        }, { passive: true });
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            const target = document.querySelector(`[id='${decodeURIComponent(id)}']`);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                target.scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                target.scrollIntoView();
+            }
+            
+            
+            if (target.tabIndex < 0 && !target.hasAttribute("tabindex")) {
+                target.setAttribute("tabindex", "-1");
+            }
+            target.focus({ preventScroll: true });
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    var scrollTicking = false;
+    
+    window.addEventListener("scroll", function () {
+        if (scrollTicking) {
+            return;
+        }
+        scrollTicking = true;
+        requestAnimationFrame(function () {
+            const scrollThreshold = window.innerHeight;
+            const shown = document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold;
+            toplink.classList.toggle("hidden", !shown);
+            scrollTicking = false;
+        });
+    }, { passive: true });
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
 </body>
+
 </html>
