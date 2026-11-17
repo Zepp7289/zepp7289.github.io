@@ -15,28 +15,11 @@
       <guid>https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://github.com/Zepp7289/VoidTrace&#34;&gt;VoidTrace&lt;/a&gt; 是我基于 &lt;a href=&#34;https://github.com/bmax121/KernelPatch&#34;&gt;KernelPatch&lt;/a&gt; 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。&lt;/p&gt;
 &lt;h2 id=&#34;适配设备&#34;&gt;适配设备&lt;/h2&gt;
-&lt;table&gt;
-	&lt;thead&gt;
-			&lt;tr&gt;
-					&lt;th&gt;项目&lt;/th&gt;
-					&lt;th&gt;信息&lt;/th&gt;
-			&lt;/tr&gt;
-	&lt;/thead&gt;
-	&lt;tbody&gt;
-			&lt;tr&gt;
-					&lt;td&gt;设备名称&lt;/td&gt;
-					&lt;td&gt;红米 K40&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;设备代号&lt;/td&gt;
-					&lt;td&gt;alioth&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;内核版本&lt;/td&gt;
-					&lt;td&gt;4.19.157&lt;/td&gt;
-			&lt;/tr&gt;
-	&lt;/tbody&gt;
-&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;设备名称&lt;/strong&gt;：红米 K40&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;设备代号&lt;/strong&gt;：alioth&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内核版本&lt;/strong&gt;：4.19.157&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
 &lt;h3 id=&#34;单步是什么&#34;&gt;单步是什么&lt;/h3&gt;
 &lt;p&gt;单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。&lt;/p&gt;
@@ -53,7 +36,13 @@
 &lt;h3 id=&#34;voidtrace和其他qbdi-like的trace有什么区别&#34;&gt;VoidTrace和其他QBDI-like的trace有什么区别&lt;/h3&gt;
 &lt;p&gt;QBDI-like 的 trace 工作在用户空间，检测特征较多，可以预见接下来安全厂商会加大检测力度，VoidTrace 在内核空间，天然隔离。&lt;/p&gt;
 &lt;h3 id=&#34;arm64单步原理&#34;&gt;ARM64单步原理&lt;/h3&gt;
-&lt;p&gt;ARM64 上需要几个部分配合：&lt;/p&gt;</description>
+&lt;p&gt;ARM64 上需要几个部分配合：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MDSCR_EL1.SS&lt;/code&gt;：Monitor Debug System Control Register - Software Step，作为软件单步功能的开关。只有当 &lt;code&gt;MDSCR_EL1.SS == 1&lt;/code&gt; 时，硬件的软件单步逻辑才会生效；如果 &lt;code&gt;MDSCR_EL1.SS == 0&lt;/code&gt;，即便 &lt;code&gt;PSTATE.SS&lt;/code&gt; 为 &lt;code&gt;1&lt;/code&gt;，也不会因为单步机制触发软件步进异常。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PSTATE.SS&lt;/code&gt;：Processor State - Software Step，保存了处理器当前的执行状态，置位后，异常返回到用户态时，执行一条指令就触发一次 Software Step 异常，重新陷入内核&lt;/li&gt;
+&lt;li&gt;内核侧由 &lt;code&gt;arch/arm64/kernel/debug-monitors.c&lt;/code&gt; 的 step handler 处理异常，开关函数是 &lt;code&gt;user_enable_single_step()&lt;/code&gt; / &lt;code&gt;user_disable_single_step()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;传统流程中这套机制由 ptrace 驱动：tracer 调 &lt;code&gt;ptrace(PTRACE_SINGLESTEP)&lt;/code&gt; → 内核 &lt;code&gt;user_enable_single_step()&lt;/code&gt; → 单步异常 → 内核给 tracer 发 &lt;code&gt;SIGTRAP&lt;/code&gt;。单步的执行在内核，但控制和通知都要经过用户空间的 tracer，同时暴露出 &lt;code&gt;TracerPid&lt;/code&gt;、&lt;code&gt;SIGTRAP&lt;/code&gt;、&lt;code&gt;/proc/self/status&lt;/code&gt; 等检测点。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
