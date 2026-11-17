@@ -20,7 +20,7 @@
   />
 
   
-  <title>Introduce Voidtrace - Zepp7289</title>
+  <title>Voidtrace在内核态进行用户态无痕Trace的KPM模块 - Zepp7289</title>
 
   
   <meta name="theme-color" />
@@ -99,7 +99,7 @@ ARM64 上需要几个部分配合：" />
   />
 
   <meta name="generator" content="Hugo 0.170.0">
-	<meta itemprop="name" content="Introduce Voidtrace">
+	<meta itemprop="name" content="Voidtrace在内核态进行用户态无痕Trace的KPM模块">
 	<meta itemprop="description" content="VoidTrace 简介 VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
 为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
@@ -113,7 +113,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 	<meta itemprop="dateModified" content="2026-11-17T09:16:51+08:00">
 	<meta itemprop="wordCount" content="781"><meta property="og:url" content="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/">
 	<meta property="og:site_name" content="Zepp7289">
-	<meta property="og:title" content="Introduce Voidtrace">
+	<meta property="og:title" content="Voidtrace在内核态进行用户态无痕Trace的KPM模块">
 	<meta property="og:description" content="VoidTrace 简介 VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
 为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
@@ -130,7 +130,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 		<meta property="article:modified_time" content="2026-11-17T09:16:51+08:00">
 
 	<meta name="twitter:card" content="summary">
-	<meta name="twitter:title" content="Introduce Voidtrace">
+	<meta name="twitter:title" content="Voidtrace在内核态进行用户态无痕Trace的KPM模块">
 	<meta name="twitter:description" content="VoidTrace 简介 VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
 为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
@@ -219,7 +219,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
       class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-14 pb-16"
     ><article>
   <header class="mb-14">
-    <h1 class="my-0! pb-2.5">Introduce Voidtrace</h1><div class="text-xs antialiased opacity-60"><time>Nov 17, 2026</time></div></header>
+    <h1 class="my-0! pb-2.5">Voidtrace在内核态进行用户态无痕Trace的KPM模块</h1><div class="text-xs antialiased opacity-60"><time>Nov 17, 2026</time></div></header>
 
   <section><h1 id="voidtrace">VoidTrace</h1>
 <h2 id="简介">简介</h2>
@@ -312,7 +312,7 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 </span></span></code></pre></div><p>只匹配 <code>sig == 5 &amp;&amp; si_code == 0</code>（SI_USER，内核发出的 SIGTRAP），只吞掉自己单步产生的信号，不影响进程正常信号处理。</p>
 <p>至此，进程正常运行，单步循环只在内核里发生，用户空间不可见。</p>
 <h3 id="异常里面的睡眠">异常里面的睡眠</h3>
-<p>trace 流程里几个真正的&quot;重活&quot;——打开落盘文件、写文件、创建/释放 PMU watchdog——都是可睡眠的操作：<code>filp_open</code> 要走 VFS 路径解析，可能从 UFS/eMMC 读 inode 块；<code>kernel_write</code> 走 ext4/f2fs 日志事务和脏页回写，内部是 mutex 和等待队列；<code>perf_event_create_kernel_counter</code> 要拿 perf context 的 mutex。而触发它们的时机恰恰全落在不能睡眠的上下文</p>
+<p>trace 流程里几个的重活，打开落盘文件、写文件、创建/释放 PMU watchdog都是可睡眠的操作：<code>filp_open</code> 要走 VFS 路径解析，可能从 UFS/eMMC 读 inode 块；<code>kernel_write</code> 走 ext4/f2fs 日志事务和脏页回写，内部是 mutex 和等待队列；<code>perf_event_create_kernel_counter</code> 要拿 perf context 的 mutex。而触发它们的时机恰恰全落在不能睡眠的上下文</p>
 <h4 id="为什么用-task_work_add">为什么用 task_work_add</h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">task_work_add_ptr</span>(current, <span style="color:#f92672">&amp;</span>trace_flush_work, true);
 </span></span></code></pre></div><p><code>task_work_add(task, work, notify=true)</code> 把 <code>callback_head</code> 压入 <code>task-&gt;task_works</code> 链表并置 <code>TIF_NOTIFY_RESUME</code>（kernel/task_work.c:28-40）。此后异常返回路径必经的 <code>ret_to_user</code>（entry.S:931）检查到该 flag，走 <code>work_pending</code> → <code>do_notify_resume()</code>（signal.c:915）→ <code>tracehook_notify_resume()</code> → <code>task_work_run()</code> 执行回调。它同时满足几个条件：</p>
