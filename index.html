@@ -130,7 +130,7 @@
   </header>
   <div class="entry-content">
     <p>VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
-适配设备 设备名称：红米 K40 设备代号：alioth 内核版本：4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
+适配设备 设备名称：红米 K40 设备代号：alioth 内核版本：4.19.157 VoidTrace设计 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
 为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高，知名格言：
 “Never wrestle with pigs. You both get dirty and the pigs like it.”
 继续和安全厂商在用户空间玩耍毫无意义，我们要做的是降维打击。

@@ -20,7 +20,7 @@
 &lt;li&gt;&lt;strong&gt;设备代号&lt;/strong&gt;：alioth&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;内核版本&lt;/strong&gt;：4.19.157&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;项目背景&#34;&gt;项目背景&lt;/h2&gt;
+&lt;h2 id=&#34;voidtrace设计&#34;&gt;VoidTrace设计&lt;/h2&gt;
 &lt;h3 id=&#34;单步是什么&#34;&gt;单步是什么&lt;/h3&gt;
 &lt;p&gt;单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。&lt;/p&gt;
 &lt;h3 id=&#34;为什么开发voidtrace&#34;&gt;为什么开发VoidTrace&lt;/h3&gt;
