@@ -20,14 +20,12 @@
   />
 
   
-  <title>Voidtrace在内核态进行用户态无痕Trace的KPM模块 - Zepp7289</title>
+  <title>Voidtrace在内核态进行用户态无痕Trace - Zepp7289</title>
 
   
   <meta name="theme-color" />
 
-  <meta name="description" content="VoidTrace
-简介
-VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
+  <meta name="description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备
 
 	
@@ -99,8 +97,8 @@ ARM64 上需要几个部分配合：" />
   />
 
   <meta name="generator" content="Hugo 0.170.0">
-	<meta itemprop="name" content="Voidtrace在内核态进行用户态无痕Trace的KPM模块">
-	<meta itemprop="description" content="VoidTrace 简介 VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
+	<meta itemprop="name" content="Voidtrace在内核态进行用户态无痕Trace">
+	<meta itemprop="description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
 为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
 “Never wrestle with pigs. You both get dirty and the pigs like it.”
@@ -111,10 +109,10 @@ VoidTrace和其他QBDI-like的trace有什么区别 QBDI-like 的 trace 工作在
 ARM64单步原理 ARM64 上需要几个部分配合：">
 	<meta itemprop="datePublished" content="2026-11-17T09:16:51+08:00">
 	<meta itemprop="dateModified" content="2026-11-17T09:16:51+08:00">
-	<meta itemprop="wordCount" content="781"><meta property="og:url" content="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/">
+	<meta itemprop="wordCount" content="779"><meta property="og:url" content="https://zepp7289.github.io/posts/introduce-voidtrace/introduce-voidtrace/">
 	<meta property="og:site_name" content="Zepp7289">
-	<meta property="og:title" content="Voidtrace在内核态进行用户态无痕Trace的KPM模块">
-	<meta property="og:description" content="VoidTrace 简介 VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
+	<meta property="og:title" content="Voidtrace在内核态进行用户态无痕Trace">
+	<meta property="og:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
 为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
 “Never wrestle with pigs. You both get dirty and the pigs like it.”
@@ -130,8 +128,8 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
 		<meta property="article:modified_time" content="2026-11-17T09:16:51+08:00">
 
 	<meta name="twitter:card" content="summary">
-	<meta name="twitter:title" content="Voidtrace在内核态进行用户态无痕Trace的KPM模块">
-	<meta name="twitter:description" content="VoidTrace 简介 VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
+	<meta name="twitter:title" content="Voidtrace在内核态进行用户态无痕Trace">
+	<meta name="twitter:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
 适配设备 项目 信息 设备名称 红米 K40 设备代号 alioth 内核版本 4.19.157 项目背景 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
 为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高。
 “Never wrestle with pigs. You both get dirty and the pigs like it.”
@@ -219,11 +217,9 @@ ARM64单步原理 ARM64 上需要几个部分配合：">
       class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-14 pb-16"
     ><article>
   <header class="mb-14">
-    <h1 class="my-0! pb-2.5">Voidtrace在内核态进行用户态无痕Trace的KPM模块</h1><div class="text-xs antialiased opacity-60"><time>Nov 17, 2026</time></div></header>
+    <h1 class="my-0! pb-2.5">Voidtrace在内核态进行用户态无痕Trace</h1><div class="text-xs antialiased opacity-60"><time>Nov 17, 2026</time></div></header>
 
-  <section><h1 id="voidtrace">VoidTrace</h1>
-<h2 id="简介">简介</h2>
-<p><a href="https://github.com/Zepp7289/VoidTrace">VoidTrace</a> 是我基于 <a href="https://github.com/bmax121/KernelPatch">KernelPatch</a> 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。</p>
+  <section><p><a href="https://github.com/Zepp7289/VoidTrace">VoidTrace</a> 是我基于 <a href="https://github.com/bmax121/KernelPatch">KernelPatch</a> 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。</p>
 <h2 id="适配设备">适配设备</h2>
 <table>
 	<thead>
