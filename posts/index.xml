@@ -24,7 +24,7 @@
 &lt;h3 id=&#34;单步是什么&#34;&gt;单步是什么&lt;/h3&gt;
 &lt;p&gt;单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。&lt;/p&gt;
 &lt;h3 id=&#34;为什么开发voidtrace&#34;&gt;为什么开发VoidTrace&lt;/h3&gt;
-&lt;p&gt;用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，继续在用户空间和安全厂商对抗难度水涨船高，知名格言：&lt;/p&gt;
+&lt;p&gt;用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，对抗难度水涨船高，知名格言：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;&amp;ldquo;Never wrestle with pigs. You both get dirty and the pigs like it.&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
