@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Voidtrace实战360加固 | Zepp7289</title>
+<title>VoidTrace实战360加固 | Zepp7289</title>
 <meta name="keywords" content="">
 <meta name="description" content="指纹采集
 首先请上我们的老朋友360
@@ -88,7 +88,7 @@ static char *app_name = &#34;com.qidian.*&#34;;
 
 </script><meta property="og:url" content="https://zepp7289.github.io/posts/voidtrace-360/">
   <meta property="og:site_name" content="Zepp7289">
-  <meta property="og:title" content="Voidtrace实战360加固">
+  <meta property="og:title" content="VoidTrace实战360加固">
   <meta property="og:description" content="指纹采集 首先请上我们的老朋友360
 名称：com.qidian.*
 版本：7.9.484.2016
@@ -105,7 +105,7 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*&#34;;
     <meta property="article:modified_time" content="2026-11-17T16:51:30+08:00">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Voidtrace实战360加固">
+  <meta name="twitter:title" content="VoidTrace实战360加固">
   <meta name="twitter:description" content="指纹采集 首先请上我们的老朋友360
 名称：com.qidian.*
 版本：7.9.484.2016
@@ -131,7 +131,7 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*&#34;;
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Voidtrace实战360加固",
+      "name": "VoidTrace实战360加固",
       "item": "https://zepp7289.github.io/posts/voidtrace-360/"
     }
   ]
@@ -141,8 +141,8 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*&#34;;
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Voidtrace实战360加固",
-  "name": "Voidtrace实战360加固",
+  "headline": "VoidTrace实战360加固",
+  "name": "VoidTrace实战360加固",
   "description": "指纹采集 首先请上我们的老朋友360\n名称：com.qidian.*\n版本：7.9.484.2016\n目标：libjiagu_vip.so\n先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹\nstatic uid_t target_uid = 10297; static char *app_name = \u0026#34;com.qidian.*\u0026#34;; 从dmesg日志可以看到\n[ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5 典型的自修改so\n从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000\n现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址\n",
   "keywords": [
     
@@ -220,7 +220,7 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*&#34;;
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      Voidtrace实战360加固
+      VoidTrace实战360加固
     </h1>
     <div class="post-meta">
 
