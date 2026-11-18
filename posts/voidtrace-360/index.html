@@ -11,7 +11,7 @@
 首先请上我们的老朋友360
 
 
-名称：com.qidian.********
+名称：com.qidian.*
 
 
 版本：7.9.484.2016
@@ -22,7 +22,7 @@
 
 先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹
 static uid_t target_uid = 10297;
-static char *app_name = &#34;com.qidian.********&#34;;
+static char *app_name = &#34;com.qidian.*&#34;;
 从dmesg日志可以看到
 [ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000
 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7
@@ -90,11 +90,11 @@ static char *app_name = &#34;com.qidian.********&#34;;
   <meta property="og:site_name" content="Zepp7289">
   <meta property="og:title" content="Voidtrace实战360加固">
   <meta property="og:description" content="指纹采集 首先请上我们的老朋友360
-名称：com.qidian.********
+名称：com.qidian.*
 版本：7.9.484.2016
 目标：libjiagu_vip.so
 先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹
-static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.********&#34;; 从dmesg日志可以看到
+static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*&#34;; 从dmesg日志可以看到
 [ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5 典型的自修改so
 从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000
 现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址">
@@ -107,11 +107,11 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*******
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Voidtrace实战360加固">
   <meta name="twitter:description" content="指纹采集 首先请上我们的老朋友360
-名称：com.qidian.********
+名称：com.qidian.*
 版本：7.9.484.2016
 目标：libjiagu_vip.so
 先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹
-static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.********&#34;; 从dmesg日志可以看到
+static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*&#34;; 从dmesg日志可以看到
 [ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5 典型的自修改so
 从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000
 现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址">
@@ -143,11 +143,11 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*******
   "@type": "BlogPosting",
   "headline": "Voidtrace实战360加固",
   "name": "Voidtrace实战360加固",
-  "description": "指纹采集 首先请上我们的老朋友360\n名称：com.qidian.********\n版本：7.9.484.2016\n目标：libjiagu_vip.so\n先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹\nstatic uid_t target_uid = 10297; static char *app_name = \u0026#34;com.qidian.********\u0026#34;; 从dmesg日志可以看到\n[ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5 典型的自修改so\n从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000\n现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址\n",
+  "description": "指纹采集 首先请上我们的老朋友360\n名称：com.qidian.*\n版本：7.9.484.2016\n目标：libjiagu_vip.so\n先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹\nstatic uid_t target_uid = 10297; static char *app_name = \u0026#34;com.qidian.*\u0026#34;; 从dmesg日志可以看到\n[ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5 典型的自修改so\n从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000\n现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址\n",
   "keywords": [
     
   ],
-  "articleBody": "指纹采集 首先请上我们的老朋友360\n名称：com.qidian.********\n版本：7.9.484.2016\n目标：libjiagu_vip.so\n先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹\nstatic uid_t target_uid = 10297; static char *app_name = \"com.qidian.********\"; 从dmesg日志可以看到\n[ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5 典型的自修改so\n从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000\n现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址\n我这里懒得开IDA了，直接让AI一通分析，拿到了init_array[0]地址是0x2994AC，由于link阶段是单线程的，所以trace理论上可以完整覆盖init一直到JNI_OnLoad\n参数设置 我们这里把segment_func_offset_next设大点，覆盖掉libjiagu_vip.so的整个so，结尾由max_steps来进行，max_steps也调整到1«26使得覆盖范围尽可能多，同时也要关注手机空间，一条记录800字节，1«26就是50GB\nstatic uint64_t segment_func_offset = 0x2994AC; static uint64_t segment_func_offset_next = 0x2BF000; static unsigned long max_steps = 1UL \u003c\u003c 26; 取消掉trace的注释块\nif (tmp_buf \u0026\u0026 !trace_task \u0026\u0026 !is_trace) { is_trace = true; trace_task = current; memcpy((char *)tmp_buf + tmp_cur_size, \u0026regs-\u003euser_regs, sizeof(regs-\u003euser_regs)); fpsimd_save_state_ptr((struct user_fpsimd_state *)((char *)tmp_buf + tmp_cur_size + sizeof(regs-\u003euser_regs))); tmp_cur_size += sizeof(regs-\u003euser_regs) + sizeof(struct user_fpsimd_state); task_work_add_ptr(current, \u0026trace_start_work, true); pr_info(\"trace start pc: %px steps: %lu\\n\", regs-\u003epc, trace_steps); } 设置正确的mmap指纹\nif (uid == target_uid \u0026\u0026 length == 0x1bf78 \u0026\u0026 offset == 0x4000 \u0026\u0026 !is_hook) 编译推送设备，加载后就可以启动APP了，注意顺序不能乱\n启动的时候可以看到APP卡死，这是正常的，因为主线程被阻塞等待libjiagu_vip.so跑完，然而libjiagu_vip.so在被trace中，速度会变得非常慢，但是不用担心，可以去/data/data//files目录下面看trace.bin有没有在增长，同时顺便采集下dmesg日志对应的maps\nadb shell \"su -c 'dmesg -C \u0026\u0026 dmesg -w'\" \u003e dmesg.log adb shell \"su -c 'cat /proc//maps'\" \u003e maps 产物分析 卡了一会后等trace跑完了，APP就会变的顺畅并成功启动，这时候就杀掉APP，卸载模块，拉取trace.bin到本地了\n先看看trace.bin体积\n-a--- 2026/11/17 21:39 53687092000 trace.bin 53687092000字节，除一下单条800字节，正好是67108865条记录，1«26是67108864，所以是首条记录加上1«26条，完美\n再看看dmesg.log\n[ 1018.743409] trace start pc: 000000777b2a34ac steps: 0 [ 1239.426950] trace stop pc: 000000777b149fd4 steps: 67108864 可以看到trace速度还过得去吧，要知道K40是发布于6年前的老机子了，存储也老化了，但是依然可以做到3分半钟跑了50GB，换成更强的硬件速度还能更快\n这时候就可以手动分析了，或者懒得看丢给AI也是一样的\nAI结合trace，挖出了非常多的信息，节选一部分：\n执行顺序 记录范围 区域 阶段 rec[0..36] LOAD3 init_proc 0x2994AC（36 条指令） rec[37..33228] LOAD3 JNI_OnLoad 0x299b88：GetEnv + sub_299724（反射探测 + SM4 自补丁 + 自 ELF 解析） rec[33229..33313] LOAD3→LOAD1 fn A 0x29966c：执行壳私有 init 表 → 表项 0xa7d0 rec[33313..66171110] LOAD1 + anon JNI_OoLoad 0x9694：占全程 98.6% 33313..143710 准备 / 建 S 盒（KSA） 143710..21320684 RC4 解密 784,332 字节（2118 万条，32%） 21320684..66171110 解压 + 子模块装载 + 67 次桥接往返 rec[66171129..end] anon libart 直接调用注册在 anon 的 native，VM 解释执行业务；步数耗尽停止 完整性校验 部件 实现 结论 sub_29a208 w0 ^ L(τ(w1^w2^w3^w4))，L = b^(b\u003c\u003c\u003c2)^(b\u003c\u003c\u003c10)^(b\u003c\u003c\u003c18)^(b\u003c\u003c\u003c24) 标准 SM4 加密轮 sub_29a6ec w0 ^ L'(τ(w1^w2^w3^w4))，L' = b^(b\u003c\u003c\u003c13)^(b\u003c\u003c\u003c23) 标准 SM4 密钥扩展步 S 盒 文件 0x29ef00，256 字节 标准 SM4 S 盒 FK / CK — 均为标准值（CK[0]=0x00070e15 … CK[31]=0x646b7279） 验证：用文件内 S 盒 + 标准 FK/CK 实现 SM4，国密标准测试向量 key=pt=0123456789abcdeffedcba9876543210 → 681edf34d206965e86b3e94f536e4246 完全一致。\n执行结构：32 轮 sub_29a6ec = 密钥扩展（生成 rk[0..31]）；160 轮 sub_29a208 = 5 块 × 32 轮，rk 正序使用（= SM4 加密方向）；块 1~4 的输入恰为磁盘 vaddr 0x00/0x10/0x20/0x30（按大端分组），块 0 输入为运行期堆数据。\n轮级验证：用复刻实现重放 trace 的 192 轮输入 → 192/192 轮输出与 trace 完全一致（100%）。\n密钥 = APK 签名证书的 MD5（关键）\n项 值 META-INF/QIDIAN.RSA 882 B，PKCS#7 SignedData（OID 1.2.840.113549.1.7.2） 证书 DER 553 B，开头 30820225 3082018e a003020102 02044e... MD5(证书 DER) adf3951748a3ecbc6ff8f5b62a4337da trace 里 K0 ^ FK adf39517 48a3ecbc 6ff8f5b6 2a4337da → 逐字节相同 用该 MD5 作主密钥独立跑密钥扩展 rk[0..31] 32/32 与 trace 一致 荷载释放 输入 值 来源 密文 784,332 B，so 文件偏移 0x24138 ctor 里 memcpy 的 src=0x777b03a138（LOAD2 文件映射） 密钥材料 10 字节 76 56 57 34 23 91 23 53 56 74 运行时堆 0xb4000078086f7100，由 0x426 字节密钥块经 0x6c98 解析派生 KSA 标准 RC4：S=0..255，j=(j+key[k%10]+S[i])\u00260xff 0x6568，全 trace 仅执行一次（256 轮） PRGA i=(i+2)\u00260xff; j=(j+S[i]+1)\u00260xff; swap; ks=S[(S[i]+S[j])\u00260xff] 0x66c8–0x6730 初值 i=3, j=5 0x66b8/0x66c0 立即数 验证（用算法构造，与 trace 对比）\n校验项 结果 密文：trace 读到的 ct vs 文件 0x24138 84/84 一致 keystream：算法计算 vs trace w10@0x6728 84/84 一致 明文：算法构造 vs trace w10@0x672c 完全相同 自证：明文第 4 字节起是否为合法 zlib 是，成功解压 最后总结 可以看到，完全没有人手工介入的情况下，AI拿到了壳完整的逻辑流，这和脱光了给人看有什么区别\n首先是APK完整性校验逻辑，识别到是SM4，还拿到了密钥\n然后是子so释放，AI直接拿到了生成算法，而且还识别出是RC4，然后构造出了明文so，顺便和trace进行了对比验证\n再往下就是dex释放和vm逻辑了，目前信息已经足够展示VoidTrace的强大，便不再展开\n",
+  "articleBody": "指纹采集 首先请上我们的老朋友360\n名称：com.qidian.*\n版本：7.9.484.2016\n目标：libjiagu_vip.so\n先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹\nstatic uid_t target_uid = 10297; static char *app_name = \"com.qidian.*\"; 从dmesg日志可以看到\n[ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5 典型的自修改so\n从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000\n现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址\n我这里懒得开IDA了，直接让AI一通分析，拿到了init_array[0]地址是0x2994AC，由于link阶段是单线程的，所以trace理论上可以完整覆盖init一直到JNI_OnLoad\n参数设置 我们这里把segment_func_offset_next设大点，覆盖掉libjiagu_vip.so的整个so，结尾由max_steps来进行，max_steps也调整到1«26使得覆盖范围尽可能多，同时也要关注手机空间，一条记录800字节，1«26就是50GB\nstatic uint64_t segment_func_offset = 0x2994AC; static uint64_t segment_func_offset_next = 0x2BF000; static unsigned long max_steps = 1UL \u003c\u003c 26; 取消掉trace的注释块\nif (tmp_buf \u0026\u0026 !trace_task \u0026\u0026 !is_trace) { is_trace = true; trace_task = current; memcpy((char *)tmp_buf + tmp_cur_size, \u0026regs-\u003euser_regs, sizeof(regs-\u003euser_regs)); fpsimd_save_state_ptr((struct user_fpsimd_state *)((char *)tmp_buf + tmp_cur_size + sizeof(regs-\u003euser_regs))); tmp_cur_size += sizeof(regs-\u003euser_regs) + sizeof(struct user_fpsimd_state); task_work_add_ptr(current, \u0026trace_start_work, true); pr_info(\"trace start pc: %px steps: %lu\\n\", regs-\u003epc, trace_steps); } 设置正确的mmap指纹\nif (uid == target_uid \u0026\u0026 length == 0x1bf78 \u0026\u0026 offset == 0x4000 \u0026\u0026 !is_hook) 编译推送设备，加载后就可以启动APP了，注意顺序不能乱\n启动的时候可以看到APP卡死，这是正常的，因为主线程被阻塞等待libjiagu_vip.so跑完，然而libjiagu_vip.so在被trace中，速度会变得非常慢，但是不用担心，可以去/data/data/com.qidian.*/files目录下面看trace.bin有没有在增长，同时顺便采集下dmesg日志对应的maps\nadb shell \"su -c 'dmesg -C \u0026\u0026 dmesg -w'\" \u003e dmesg.log adb shell \"su -c 'cat /proc//maps'\" \u003e maps 产物分析 卡了一会后等trace跑完了，APP就会变的顺畅并成功启动，这时候就杀掉APP，卸载模块，拉取trace.bin到本地了\n先看看trace.bin体积\n-a--- 2026/11/17 21:39 53687092000 trace.bin 53687092000字节，除一下单条800字节，正好是67108865条记录，1«26是67108864，所以是首条记录加上1«26条，完美\n再看看dmesg.log\n[ 1018.743409] trace start pc: 000000777b2a34ac steps: 0 [ 1239.426950] trace stop pc: 000000777b149fd4 steps: 67108864 可以看到trace速度还过得去吧，要知道K40是发布于6年前的老机子了，存储也老化了，但是依然可以做到3分半钟跑了50GB，换成更强的硬件速度还能更快\n这时候就可以手动分析了，或者懒得看丢给AI也是一样的\nAI结合trace，挖出了非常多的信息，节选一部分：\n执行顺序 记录范围 区域 阶段 rec[0..36] LOAD3 init_proc 0x2994AC（36 条指令） rec[37..33228] LOAD3 JNI_OnLoad 0x299b88：GetEnv + sub_299724（反射探测 + SM4 自补丁 + 自 ELF 解析） rec[33229..33313] LOAD3→LOAD1 fn A 0x29966c：执行壳私有 init 表 → 表项 0xa7d0 rec[33313..66171110] LOAD1 + anon JNI_OoLoad 0x9694：占全程 98.6% 33313..143710 准备 / 建 S 盒（KSA） 143710..21320684 RC4 解密 784,332 字节（2118 万条，32%） 21320684..66171110 解压 + 子模块装载 + 67 次桥接往返 rec[66171129..end] anon libart 直接调用注册在 anon 的 native，VM 解释执行业务；步数耗尽停止 完整性校验 部件 实现 结论 sub_29a208 w0 ^ L(τ(w1^w2^w3^w4))，L = b^(b\u003c\u003c\u003c2)^(b\u003c\u003c\u003c10)^(b\u003c\u003c\u003c18)^(b\u003c\u003c\u003c24) 标准 SM4 加密轮 sub_29a6ec w0 ^ L'(τ(w1^w2^w3^w4))，L' = b^(b\u003c\u003c\u003c13)^(b\u003c\u003c\u003c23) 标准 SM4 密钥扩展步 S 盒 文件 0x29ef00，256 字节 标准 SM4 S 盒 FK / CK — 均为标准值（CK[0]=0x00070e15 … CK[31]=0x646b7279） 验证：用文件内 S 盒 + 标准 FK/CK 实现 SM4，国密标准测试向量 key=pt=0123456789abcdeffedcba9876543210 → 681edf34d206965e86b3e94f536e4246 完全一致。\n执行结构：32 轮 sub_29a6ec = 密钥扩展（生成 rk[0..31]）；160 轮 sub_29a208 = 5 块 × 32 轮，rk 正序使用（= SM4 加密方向）；块 1~4 的输入恰为磁盘 vaddr 0x00/0x10/0x20/0x30（按大端分组），块 0 输入为运行期堆数据。\n轮级验证：用复刻实现重放 trace 的 192 轮输入 → 192/192 轮输出与 trace 完全一致（100%）。\n密钥 = APK 签名证书的 MD5（关键）\n项 值 META-INF/QIDIAN.RSA 882 B，PKCS#7 SignedData（OID 1.2.840.113549.1.7.2） 证书 DER 553 B，开头 30820225 3082018e a003020102 02044e... MD5(证书 DER) adf3951748a3ecbc6ff8f5b62a4337da trace 里 K0 ^ FK adf39517 48a3ecbc 6ff8f5b6 2a4337da → 逐字节相同 用该 MD5 作主密钥独立跑密钥扩展 rk[0..31] 32/32 与 trace 一致 荷载释放 输入 值 来源 密文 784,332 B，so 文件偏移 0x24138 ctor 里 memcpy 的 src=0x777b03a138（LOAD2 文件映射） 密钥材料 10 字节 76 56 57 34 23 91 23 53 56 74 运行时堆 0xb4000078086f7100，由 0x426 字节密钥块经 0x6c98 解析派生 KSA 标准 RC4：S=0..255，j=(j+key[k%10]+S[i])\u00260xff 0x6568，全 trace 仅执行一次（256 轮） PRGA i=(i+2)\u00260xff; j=(j+S[i]+1)\u00260xff; swap; ks=S[(S[i]+S[j])\u00260xff] 0x66c8–0x6730 初值 i=3, j=5 0x66b8/0x66c0 立即数 验证（用算法构造，与 trace 对比）\n校验项 结果 密文：trace 读到的 ct vs 文件 0x24138 84/84 一致 keystream：算法计算 vs trace w10@0x6728 84/84 一致 明文：算法构造 vs trace w10@0x672c 完全相同 自证：明文第 4 字节起是否为合法 zlib 是，成功解压 最后总结 可以看到，完全没有人手工介入的情况下，AI拿到了壳完整的逻辑流，这和脱光了给人看有什么区别\n首先是APK完整性校验逻辑，识别到是SM4，还拿到了密钥\n然后是子so释放，AI直接拿到了生成算法，而且还识别出是RC4，然后构造出了明文so，顺便和trace进行了对比验证\n再往下就是dex释放和vm逻辑了，目前信息已经足够展示VoidTrace的强大，便不再展开\n",
   "wordCount" : "481",
   "inLanguage": "en",
   "datePublished": "2026-11-17T16:51:30+08:00",
@@ -232,7 +232,7 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*******
 <p>首先请上我们的老朋友360</p>
 <ul>
 <li>
-<p><strong><strong>名称</strong></strong>：com.qidian.********</p>
+<p><strong><strong>名称</strong></strong>：com.qidian.*</p>
 </li>
 <li>
 <p><strong><strong>版本</strong></strong>：7.9.484.2016</p>
@@ -243,7 +243,7 @@ static uid_t target_uid = 10297; static char *app_name = &#34;com.qidian.*******
 </ul>
 <p>先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹</p>
 <pre tabindex="0"><code>static uid_t target_uid = 10297;
-static char *app_name = &#34;com.qidian.********&#34;;
+static char *app_name = &#34;com.qidian.*&#34;;
 </code></pre><p>从dmesg日志可以看到</p>
 <pre tabindex="0"><code>[ 3433.015277] mmap pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1bf78 prot: 5 fd: 86 offset: 4000 ret: 000000745df03000
 [ 3433.015618] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 7
@@ -272,7 +272,7 @@ static unsigned long max_steps = 1UL &lt;&lt; 26;
 </code></pre><p>设置正确的mmap指纹</p>
 <pre tabindex="0"><code>if (uid == target_uid &amp;&amp; length == 0x1bf78 &amp;&amp; offset == 0x4000 &amp;&amp; !is_hook)
 </code></pre><p>编译推送设备，加载后就可以启动APP了，注意顺序不能乱</p>
-<p>启动的时候可以看到APP卡死，这是正常的，因为主线程被阻塞等待libjiagu_vip.so跑完，然而libjiagu_vip.so在被trace中，速度会变得非常慢，但是不用担心，可以去/data/data/<!-- raw HTML omitted -->/files目录下面看trace.bin有没有在增长，同时顺便采集下dmesg日志对应的maps</p>
+<p>启动的时候可以看到APP卡死，这是正常的，因为主线程被阻塞等待libjiagu_vip.so跑完，然而libjiagu_vip.so在被trace中，速度会变得非常慢，但是不用担心，可以去/data/data/com.qidian.*/files目录下面看trace.bin有没有在增长，同时顺便采集下dmesg日志对应的maps</p>
 <pre tabindex="0"><code>adb shell &#34;su -c &#39;dmesg -C &amp;&amp; dmesg -w&#39;&#34; &gt; dmesg.log
 adb shell &#34;su -c &#39;cat /proc/&lt;pid&gt;/maps&#39;&#34; &gt; maps
 </code></pre><h1 id="产物分析">产物分析<a hidden class="anchor" aria-hidden="true" href="#产物分析">#</a></h1>
