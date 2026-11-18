@@ -6,8 +6,33 @@
     <description>Recent content on Zepp7289</description>
     <generator>Hugo</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 17 Nov 2026 16:51:30 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 18 Nov 2026 11:10:01 +0800</lastBuildDate>
     <atom:link href="https://zepp7289.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VoidTrace实战网易易盾</title>
+      <link>https://zepp7289.github.io/posts/voidtrace-nesec/</link>
+      <pubDate>Wed, 18 Nov 2026 11:10:01 +0800</pubDate>
+      <guid>https://zepp7289.github.io/posts/voidtrace-nesec/</guid>
+      <description>&lt;h1 id=&#34;指纹采集&#34;&gt;指纹采集&lt;/h1&gt;
+&lt;p&gt;再次请上我们的老朋友易盾&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;strong&gt;名称&lt;/strong&gt;&lt;/strong&gt;：com.xingjiabi.*&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;strong&gt;目标&lt;/strong&gt;&lt;/strong&gt;：libnesec.so&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;static uid_t target_uid = 10299;
+static char *app_name = &amp;#34;com.xingjiabi.*&amp;#34;;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;从dmesg日志可以看到&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[ 3368.313554] mmap pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c4000 prot: 5 fd: 88 offset: 0 ret: 00000071e9657000
+[ 3368.323639] mmap pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c3000 prot: 7 fd: 89 offset: 0 ret: 00000071e9657000
+[ 3368.323679] mprotect pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c3000 prot: 7
+[ 3368.324052] mprotect pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c3000 prot: 5
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;又是典型的自修改so，而且有点意思啊，居然mmap了两次，第二次使用第一次的地址&lt;/p&gt;</description>
+    </item>
     <item>
       <title>VoidTrace实战360加固</title>
       <link>https://zepp7289.github.io/posts/voidtrace-360/</link>

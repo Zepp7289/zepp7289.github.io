@@ -154,6 +154,26 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">VoidTrace实战网易易盾
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>指纹采集 再次请上我们的老朋友易盾
+名称：com.xingjiabi.*
+目标：libnesec.so
+先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹
+static uid_t target_uid = 10299; static char *app_name = &#34;com.xingjiabi.*&#34;; 从dmesg日志可以看到
+[ 3368.313554] mmap pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c4000 prot: 5 fd: 88 offset: 0 ret: 00000071e9657000 [ 3368.323639] mmap pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c3000 prot: 7 fd: 89 offset: 0 ret: 00000071e9657000 [ 3368.323679] mprotect pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c3000 prot: 7 [ 3368.324052] mprotect pid: 25109 tgid: 25109 uid: 10299 addr: 00000071e9657000 length: c3000 prot: 5 又是典型的自修改so，而且有点意思啊，居然mmap了两次，第二次使用第一次的地址
+...</p>
+  </div>
+  <footer class="entry-footer">
+
+<span title='2026-11-18T11:10:01+08:00'>November 18, 2026</span></footer>
+  <a class="entry-link" aria-label="post link to VoidTrace实战网易易盾" href="https://zepp7289.github.io/posts/voidtrace-nesec/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">VoidTrace实战360加固
     </h2>
   </header>
