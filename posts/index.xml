@@ -6,8 +6,41 @@
     <description>Recent content in Posts on Zepp7289</description>
     <generator>Hugo</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 18 Nov 2026 11:10:01 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2026 12:03:44 +0800</lastBuildDate>
     <atom:link href="https://zepp7289.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VoidTrace实战梆梆加固</title>
+      <link>https://zepp7289.github.io/posts/voidtrace-secneo/</link>
+      <pubDate>Thu, 19 Nov 2026 12:03:44 +0800</pubDate>
+      <guid>https://zepp7289.github.io/posts/voidtrace-secneo/</guid>
+      <description>&lt;h1 id=&#34;指纹采集&#34;&gt;指纹采集&lt;/h1&gt;
+&lt;p&gt;请上御三家的最后一位，梆梆&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;strong&gt;名称&lt;/strong&gt;&lt;/strong&gt;：cn.samsclub.*&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;strong&gt;目标&lt;/strong&gt;&lt;/strong&gt;：libDexHelper.so&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;static uid_t target_uid = 10308;
+static char *app_name = &amp;#34;cn.samsclub.*&amp;#34;;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;从dmesg日志可以看到&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[14426.558014] mmap pid: 9557 tgid: 9557 uid: 10308 addr: 0000007178a4d000 length: 4ca0 prot: 5 fd: 85 offset: 0 ret: 0000007178a4d000
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;咦，居然不是自修改，看来另有情况，继续分析&lt;/p&gt;
+&lt;p&gt;从这里我们拿到了mmap指纹length=0x4ca0 ，offset=0x0&lt;/p&gt;
+&lt;p&gt;继续丢给AI分析，拿到了init_array[0]地址是0x4780&lt;/p&gt;
+&lt;h1 id=&#34;参数设置&#34;&gt;参数设置&lt;/h1&gt;
+&lt;p&gt;老样子调整trace区间，步数，再设置正确的mmap指纹&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (uid == target_uid &amp;amp;&amp;amp; length == 0x4ca0 &amp;amp;&amp;amp; offset == 0x0 &amp;amp;&amp;amp; !is_hook)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;编译推送设备，加载后就可以启动APP了，注意顺序不能乱&lt;/p&gt;
+&lt;p&gt;采集下dmesg日志和对应的maps&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;adb shell &amp;#34;su -c &amp;#39;dmesg -C &amp;amp;&amp;amp; dmesg -w&amp;#39;&amp;#34; &amp;gt; dmesg.log
+adb shell &amp;#34;su -c &amp;#39;cat /proc/&amp;lt;pid&amp;gt;/maps&amp;#39;&amp;#34; &amp;gt; maps
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;产物分析&#34;&gt;产物分析&lt;/h1&gt;
+&lt;p&gt;等trace跑完杀掉APP，卸载模块，拉取trace.bin到本地&lt;/p&gt;</description>
+    </item>
     <item>
       <title>VoidTrace实战网易易盾</title>
       <link>https://zepp7289.github.io/posts/voidtrace-nesec/</link>

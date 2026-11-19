@@ -146,6 +146,32 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">VoidTrace实战梆梆加固
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>指纹采集 请上御三家的最后一位，梆梆
+名称：cn.samsclub.*
+目标：libDexHelper.so
+先拿到uid后编译KPM推送到设备加载然后拿到dmesg，获取目标so的指纹
+static uid_t target_uid = 10308; static char *app_name = &#34;cn.samsclub.*&#34;; 从dmesg日志可以看到
+[14426.558014] mmap pid: 9557 tgid: 9557 uid: 10308 addr: 0000007178a4d000 length: 4ca0 prot: 5 fd: 85 offset: 0 ret: 0000007178a4d000 咦，居然不是自修改，看来另有情况，继续分析
+从这里我们拿到了mmap指纹length=0x4ca0 ，offset=0x0
+继续丢给AI分析，拿到了init_array[0]地址是0x4780
+参数设置 老样子调整trace区间，步数，再设置正确的mmap指纹
+if (uid == target_uid &amp;&amp; length == 0x4ca0 &amp;&amp; offset == 0x0 &amp;&amp; !is_hook) 编译推送设备，加载后就可以启动APP了，注意顺序不能乱
+采集下dmesg日志和对应的maps
+adb shell &#34;su -c &#39;dmesg -C &amp;&amp; dmesg -w&#39;&#34; &gt; dmesg.log adb shell &#34;su -c &#39;cat /proc/&lt;pid&gt;/maps&#39;&#34; &gt; maps 产物分析 等trace跑完杀掉APP，卸载模块，拉取trace.bin到本地
+...</p>
+  </div>
+  <footer class="entry-footer">
+
+<span title='2026-11-19T12:03:44+08:00'>November 19, 2026</span></footer>
+  <a class="entry-link" aria-label="post link to VoidTrace实战梆梆加固" href="https://zepp7289.github.io/posts/voidtrace-secneo/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">VoidTrace实战网易易盾
     </h2>
   </header>
