@@ -78,9 +78,6 @@ static char *app_name = &amp;#34;com.xingjiabi.*&amp;#34;;
 &lt;p&gt;&lt;strong&gt;&lt;strong&gt;名称&lt;/strong&gt;&lt;/strong&gt;：com.qidian.*&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;strong&gt;版本&lt;/strong&gt;&lt;/strong&gt;：7.9.484.2016&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
 &lt;p&gt;&lt;strong&gt;&lt;strong&gt;目标&lt;/strong&gt;&lt;/strong&gt;：libjiagu_vip.so&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -93,7 +90,8 @@ static char *app_name = &amp;#34;com.qidian.*&amp;#34;;
 [ 3433.015632] mprotect pid: 28910 tgid: 28910 uid: 10297 addr: 000000745df03000 length: 1000 prot: 5
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;典型的自修改so&lt;/p&gt;
 &lt;p&gt;从这里我们拿到了mmap指纹length=0x1bf78 ，offset=0x4000&lt;/p&gt;
-&lt;p&gt;现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址&lt;/p&gt;</description>
+&lt;p&gt;现在我们要拿到点火地址，也就是init_proc或者init_array，一般来说这些壳会在这里进行payload释放，或者检测环境等，把libjiagu_vip.so丢进IDA或者直接叫AI分析帮你找到地址&lt;/p&gt;
+&lt;p&gt;我这里懒得开IDA了，直接让AI一通分析，拿到了init_array[0]地址是0x2994AC，由于link阶段是单线程的，所以trace理论上可以完整覆盖init一直到JNI_OnLoad&lt;/p&gt;</description>
     </item>
     <item>
       <title>About</title>
