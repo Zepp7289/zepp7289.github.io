@@ -280,7 +280,7 @@ adb shell &#34;su -c &#39;cat /proc/&lt;pid&gt;/maps&#39;&#34; &gt; maps
 </code></pre><p>这个匿名内存看起来也不对劲，一起dump到本地</p>
 <pre tabindex="0"><code>dd if=/proc/21810/mem of=/sdcard/Download/6e587c0000.global-metadata.dat bs=0x1000 count=0x6840 skip=0x6e587c0
 </code></pre><p>拿到6e587c0000.global-metadata.dat后，用hex编辑器打开，直接搜索magic看看有没有收获，这次运气好直接拿到了，某些游戏会抹掉magic就要具体分析了</p>
-<p><img loading="lazy" src="c:\\Users\\zepp7\\blog\\content\\posts\\voidtrace-promilia\\ScreenShot_2026-11-26_102922_324.png"></p>
+<p><img loading="lazy" src="/posts/voidtrace-promilia/ScreenShot_2026-11-26_102922_324.png"></p>
 <p>把前面无关内容全删了，然后用Il2CppDumper来看看</p>
 <pre tabindex="0"><code>Il2CppDumper.exe 6f01cf1000.libil2cpp.so 6e587c0000.global-metadata.dat .
 Initializing metadata...
@@ -366,7 +366,7 @@ AzurProto.dll:  ldstr -&gt; 正在访问已回收的协议 / 重复回收协议
 AzurFramework:  ldstr -&gt; {{ Class = {0}, Fields = {1} }} / Cube.fbx
 pefile 确认：PE32、.text 单节、machine=0x14C、chars=0x2102(DLL)、导入 mscoree.dll!_CorDllMain、CLI 目录 + ILONLY 正确；pe.GetMethodBody(rva) 能取到 IL（02 7b 02 00 00 0a 2a = ldarg.0/ldfld/stloc.0/ret），FieldRVA 指向的 {1,4,2,8,16,32,64,128} 2 的幂表也原样保留。
 </code></pre><p>太牛逼了兄弟，用DnSpy打开看看</p>
-<p><img loading="lazy" src="c:\\Users\\zepp7\\blog\\content\\posts\\voidtrace-promilia\\ScreenShot_2026-11-26_111621_041.png"></p>
+<p><img loading="lazy" src="/posts/voidtrace-promilia/ScreenShot_2026-11-26_111621_041.png"></p>
 <p>可以看到字符串，方法体，全部完整有了，后面不用多说了吧</p>
 <p>Happy Hacking!</p>
 
