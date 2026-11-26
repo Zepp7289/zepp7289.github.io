@@ -7,37 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>VoidTrace在内核进行无痕Trace | Zepp7289</title>
 <meta name="keywords" content="">
-<meta name="description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
-适配设备
-
-设备名称：红米 K40
-设备代号：alioth
-内核版本：4.19.157
-
-VoidTrace设计
-单步是什么
-单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
-为什么开发VoidTrace
-用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，对抗难度水涨船高，知名格言：
-
-&ldquo;Never wrestle with pigs. You both get dirty and the pigs like it.&rdquo;
-
-继续和安全厂商在用户空间玩耍毫无意义，我们要做的是降维打击。
-Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以猫鼠游戏不可避免地下沉到了内核。
-但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
-VoidTrace解决了什么问题
-目前安全厂商最核心的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路图，AI 结合 trace 可以极大提高分析效率。
-VoidTrace和QBDI或者frida-gum有什么区别
-QBDI或者frida-gum工作在用户空间，检测特征较多，可以预见安全厂商会加大检测力度，VoidTrace 在内核空间，天然隔离。
-VoidTrace和unidbg有什么区别
-unidbg是一个很厉害的native模拟器，我也深入使用过一段时间，但是慢慢就觉得补环境越来越难，而且随着安全厂商意识到了unidbg存在，也推出了很多反制措施，总是补不出完美的环境，VoidTrace工作在真机，我想光这一条就够了。
-ARM64单步原理
-ARM64 上需要几个部分配合：
-
-MDSCR_EL1.SS：Monitor Debug System Control Register - Software Step，作为软件单步功能的开关。只有当 MDSCR_EL1.SS == 1 时，硬件的软件单步逻辑才会生效；如果 MDSCR_EL1.SS == 0，即便 PSTATE.SS 为 1，也不会因为单步机制触发软件步进异常。
-PSTATE.SS：Processor State - Software Step，保存了处理器当前的执行状态，置位后，异常返回到用户态时，执行一条指令就触发一次 Software Step 异常，重新陷入内核
-
-传统流程中这套机制由 ptrace 驱动：tracer 调 ptrace(PTRACE_SINGLESTEP) → 内核 user_enable_single_step() → 单步异常 → 内核给 tracer 发 SIGTRAP。单步的执行在内核，但控制和通知都要经过用户空间的 tracer，同时暴露出 TracerPid、SIGTRAP、/proc/self/status 等检测点。">
+<meta name="description" content="VoidTrace 是基于 KernelPatch 的安卓内核级无痕 Trace 模块，纯内核实现单步调试，用户空间基本不可见。">
 <meta name="author" content="">
 <link rel="canonical" href="https://zepp7289.github.io/posts/introduce-voidtrace/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.2fd9135862a3da866393a267370bb97cd812193a02eb63558b88b00f30ec3648.css" integrity="sha256-L9kTWGKj2oZjk6JnNwu5fNgSGToC62NVi4iwDzDsNkg=" rel="preload stylesheet" as="style">
@@ -97,18 +67,7 @@ PSTATE.SS：Processor State - Software Step，保存了处理器当前的执行�
 </script><meta property="og:url" content="https://zepp7289.github.io/posts/introduce-voidtrace/">
   <meta property="og:site_name" content="Zepp7289">
   <meta property="og:title" content="VoidTrace在内核进行无痕Trace">
-  <meta property="og:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
-适配设备 设备名称：红米 K40 设备代号：alioth 内核版本：4.19.157 VoidTrace设计 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
-为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，对抗难度水涨船高，知名格言：
-“Never wrestle with pigs. You both get dirty and the pigs like it.”
-继续和安全厂商在用户空间玩耍毫无意义，我们要做的是降维打击。
-Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以猫鼠游戏不可避免地下沉到了内核。
-但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
-VoidTrace解决了什么问题 目前安全厂商最核心的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路图，AI 结合 trace 可以极大提高分析效率。
-VoidTrace和QBDI或者frida-gum有什么区别 QBDI或者frida-gum工作在用户空间，检测特征较多，可以预见安全厂商会加大检测力度，VoidTrace 在内核空间，天然隔离。
-VoidTrace和unidbg有什么区别 unidbg是一个很厉害的native模拟器，我也深入使用过一段时间，但是慢慢就觉得补环境越来越难，而且随着安全厂商意识到了unidbg存在，也推出了很多反制措施，总是补不出完美的环境，VoidTrace工作在真机，我想光这一条就够了。
-ARM64单步原理 ARM64 上需要几个部分配合：
-MDSCR_EL1.SS：Monitor Debug System Control Register - Software Step，作为软件单步功能的开关。只有当 MDSCR_EL1.SS == 1 时，硬件的软件单步逻辑才会生效；如果 MDSCR_EL1.SS == 0，即便 PSTATE.SS 为 1，也不会因为单步机制触发软件步进异常。 PSTATE.SS：Processor State - Software Step，保存了处理器当前的执行状态，置位后，异常返回到用户态时，执行一条指令就触发一次 Software Step 异常，重新陷入内核 传统流程中这套机制由 ptrace 驱动：tracer 调 ptrace(PTRACE_SINGLESTEP) → 内核 user_enable_single_step() → 单步异常 → 内核给 tracer 发 SIGTRAP。单步的执行在内核，但控制和通知都要经过用户空间的 tracer，同时暴露出 TracerPid、SIGTRAP、/proc/self/status 等检测点。">
+  <meta property="og:description" content="VoidTrace 是基于 KernelPatch 的安卓内核级无痕 Trace 模块，纯内核实现单步调试，用户空间基本不可见。">
   <meta property="og:locale" content="zh_cn">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -117,18 +76,7 @@ MDSCR_EL1.SS：Monitor Debug System Control Register - Software Step，作为软
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="VoidTrace在内核进行无痕Trace">
-  <meta name="twitter:description" content="VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。
-适配设备 设备名称：红米 K40 设备代号：alioth 内核版本：4.19.157 VoidTrace设计 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。
-为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，对抗难度水涨船高，知名格言：
-“Never wrestle with pigs. You both get dirty and the pigs like it.”
-继续和安全厂商在用户空间玩耍毫无意义，我们要做的是降维打击。
-Linux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以猫鼠游戏不可避免地下沉到了内核。
-但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。
-VoidTrace解决了什么问题 目前安全厂商最核心的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路图，AI 结合 trace 可以极大提高分析效率。
-VoidTrace和QBDI或者frida-gum有什么区别 QBDI或者frida-gum工作在用户空间，检测特征较多，可以预见安全厂商会加大检测力度，VoidTrace 在内核空间，天然隔离。
-VoidTrace和unidbg有什么区别 unidbg是一个很厉害的native模拟器，我也深入使用过一段时间，但是慢慢就觉得补环境越来越难，而且随着安全厂商意识到了unidbg存在，也推出了很多反制措施，总是补不出完美的环境，VoidTrace工作在真机，我想光这一条就够了。
-ARM64单步原理 ARM64 上需要几个部分配合：
-MDSCR_EL1.SS：Monitor Debug System Control Register - Software Step，作为软件单步功能的开关。只有当 MDSCR_EL1.SS == 1 时，硬件的软件单步逻辑才会生效；如果 MDSCR_EL1.SS == 0，即便 PSTATE.SS 为 1，也不会因为单步机制触发软件步进异常。 PSTATE.SS：Processor State - Software Step，保存了处理器当前的执行状态，置位后，异常返回到用户态时，执行一条指令就触发一次 Software Step 异常，重新陷入内核 传统流程中这套机制由 ptrace 驱动：tracer 调 ptrace(PTRACE_SINGLESTEP) → 内核 user_enable_single_step() → 单步异常 → 内核给 tracer 发 SIGTRAP。单步的执行在内核，但控制和通知都要经过用户空间的 tracer，同时暴露出 TracerPid、SIGTRAP、/proc/self/status 等检测点。">
+  <meta name="twitter:description" content="VoidTrace 是基于 KernelPatch 的安卓内核级无痕 Trace 模块，纯内核实现单步调试，用户空间基本不可见。">
 
 
 <script type="application/ld+json">
@@ -157,7 +105,7 @@ MDSCR_EL1.SS：Monitor Debug System Control Register - Software Step，作为软
   "@type": "BlogPosting",
   "headline": "VoidTrace在内核进行无痕Trace",
   "name": "VoidTrace在内核进行无痕Trace",
-  "description": "VoidTrace 是我基于 KernelPatch 开发的一个安卓 Linux 内核模块，目前已经实现了纯内核级别的线程单步 trace，用户空间基本不可见。\n适配设备 设备名称：红米 K40 设备代号：alioth 内核版本：4.19.157 VoidTrace设计 单步是什么 单步（Single-step execution）是一个计算机术语：在 gdb、ptrace 等调试过程中，可以让程序一条指令一条指令地执行，同时观察每一步执行时的变量、寄存器、内存，帮助我们更好地理解程序逻辑。\n为什么开发VoidTrace 用户空间的检测例如 anti frida、svc 调用、内存 crc 检测等强度越来越大，对抗难度水涨船高，知名格言：\n\u0026ldquo;Never wrestle with pigs. You both get dirty and the pigs like it.\u0026rdquo;\n继续和安全厂商在用户空间玩耍毫无意义，我们要做的是降维打击。\nLinux 用户空间/内核空间的设计使得我们在内核空间具有绝对的优势，所以猫鼠游戏不可避免地下沉到了内核。\n但是内核虽然处理了单步逻辑，使用上都要依托用户空间的 ptrace 配合，控制还是在用户空间，又回到了用户空间对抗，于是 VoidTrace 诞生，依靠强大的KernelPatch框架，一个完全在内核进行单步的KPM模块，无需用户空间干涉。\nVoidTrace解决了什么问题 目前安全厂商最核心的防护手段是 OLLVM 和 VMP，即使强如 AI 在静态分析时也难以取得有效进展。然而有了 trace 就等于在迷宫里直接有了出口线路图，AI 结合 trace 可以极大提高分析效率。\nVoidTrace和QBDI或者frida-gum有什么区别 QBDI或者frida-gum工作在用户空间，检测特征较多，可以预见安全厂商会加大检测力度，VoidTrace 在内核空间，天然隔离。\nVoidTrace和unidbg有什么区别 unidbg是一个很厉害的native模拟器，我也深入使用过一段时间，但是慢慢就觉得补环境越来越难，而且随着安全厂商意识到了unidbg存在，也推出了很多反制措施，总是补不出完美的环境，VoidTrace工作在真机，我想光这一条就够了。\nARM64单步原理 ARM64 上需要几个部分配合：\nMDSCR_EL1.SS：Monitor Debug System Control Register - Software Step，作为软件单步功能的开关。只有当 MDSCR_EL1.SS == 1 时，硬件的软件单步逻辑才会生效；如果 MDSCR_EL1.SS == 0，即便 PSTATE.SS 为 1，也不会因为单步机制触发软件步进异常。 PSTATE.SS：Processor State - Software Step，保存了处理器当前的执行状态，置位后，异常返回到用户态时，执行一条指令就触发一次 Software Step 异常，重新陷入内核 传统流程中这套机制由 ptrace 驱动：tracer 调 ptrace(PTRACE_SINGLESTEP) → 内核 user_enable_single_step() → 单步异常 → 内核给 tracer 发 SIGTRAP。单步的执行在内核，但控制和通知都要经过用户空间的 tracer，同时暴露出 TracerPid、SIGTRAP、/proc/self/status 等检测点。\n",
+  "description": "VoidTrace 是基于 KernelPatch 的安卓内核级无痕 Trace 模块，纯内核实现单步调试，用户空间基本不可见。",
   "keywords": [
     
   ],
