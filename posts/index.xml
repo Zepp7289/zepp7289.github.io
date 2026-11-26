@@ -13,7 +13,34 @@
       <link>https://zepp7289.github.io/posts/voidtrace-promilia/</link>
       <pubDate>Thu, 26 Nov 2026 10:04:34 +0800</pubDate>
       <guid>https://zepp7289.github.io/posts/voidtrace-promilia/</guid>
-      <description>由VoidTrace和AI强力驱动</description>
+      <description>&lt;p&gt;拿到uid后推送VoidTrace模块到设备安装后启动游戏&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;static uid_t target_uid = 10301;
+static char *app_name = &amp;#34;com.manjuu.promilia&amp;#34;;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后采集下内核日志和maps&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;adb shell &amp;#34;su -c &amp;#39;dmesg -C &amp;amp;&amp;amp; dmesg -w&amp;#39;&amp;#34; &amp;gt; dmesg.log
+adb shell &amp;#34;su -c &amp;#39;cat /proc/&amp;lt;pid&amp;gt;/maps&amp;#39;&amp;#34; &amp;gt; maps
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;磁盘上的libil2cpp.so和global-metadata.dat是加密的，我们直接去内存拿&lt;/p&gt;
+&lt;p&gt;拿到dmesg.log后直接搜索libil2cpp.so，可以看到加载过程&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[ 3300.317916] openat pid: 21810 tgid: 21810 uid: 10301 filename: /data/app/~~B3CBB2fw2QqPo6ke9iMxWg==/com.manjuu.promilia-HZeYxftp1Nr7OIutdINM1Q==/lib/arm64/libil2cpp.so ret: 107
+[ 3300.317980] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000000000000000 length: 390 prot: 1 fd: 107 offset: 0 ret: 000000707abff000
+[ 3300.317982] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000000000000000 length: 13f0 prot: 1 fd: 107 offset: 1c775000 ret: 000000707abfd000
+[ 3300.317989] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000000000000000 length: 17c0 prot: 1 fd: 107 offset: 1b785000 ret: 000000707abfb000
+[ 3300.317991] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000000000000000 length: 1d3e4 prot: 1 fd: 107 offset: 4270000 ret: 0000007071ce6000
+[ 3300.318018] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000000000000000 length: 1ca7f000 prot: 0 fd: -1 offset: 0 ret: 0000006f03581000
+[ 3300.318018] munmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f03581000 length: 1ca7f000
+[ 3300.318025] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000000000000000 length: 1e5ff000 prot: 0 fd: -1 offset: 0 ret: 0000006f01a01000
+[ 3300.318026] munmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f01a01000 length: 2f0000
+[ 3300.318028] munmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1e71f000 length: e1000
+[ 3300.318032] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f01cf1000 length: 9bc1b64 prot: 1 fd: 107 offset: 0 ret: 0000006f01cf1000
+[ 3300.318035] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f0b8b6000 length: 10d103c0 prot: 5 fd: 107 offset: 9bc1000 ret: 0000006f0b8b6000
+[ 3300.318038] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1c5ca000 length: 12858a8 prot: 3 fd: 107 offset: 1a8d1000 ret: 0000006f1c5ca000
+[ 3300.319628] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1d853000 length: c09a18 prot: 3 fd: 107 offset: 1bb56000 ret: 0000006f1d853000
+[ 3300.319637] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1e45d000 length: 29d000 prot: 3 fd: -1 offset: 0 ret: 0000006f1e45d000
+[ 3300.319642] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1e6fd000 length: 36e0 prot: 5 fd: 107 offset: 1c760000 ret: 0000006f1e6fd000
+[ 3300.319645] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1e701000 length: 39d8 prot: 3 fd: 107 offset: 1c760000 ret: 0000006f1e701000
+[ 3300.319650] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1e705000 length: 5790 prot: 3 fd: 107 offset: 1c760000 ret: 0000006f1e705000
+[ 3300.319655] mmap pid: 21810 tgid: 21810 uid: 10301 addr: 0000006f1e70d000 length: 116d8 prot: 3 fd: 107 offset: 1c764000 ret: 0000006f1e70d000
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后拿base地址0000006f01cf1000去maps看看&lt;/p&gt;</description>
     </item>
     <item>
       <title>VoidTrace在内核进行无痕Trace</title>
