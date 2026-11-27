@@ -9,11 +9,11 @@
     <lastBuildDate>Thu, 26 Nov 2026 10:04:34 +0800</lastBuildDate>
     <atom:link href="https://zepp7289.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>《蓝色星原旅谣》热更新DLL加密字节算法分析</title>
+      <title>《蓝色星原旅谣》热更新DLL加密算法分析</title>
       <link>https://zepp7289.github.io/posts/voidtrace-promilia/</link>
       <pubDate>Thu, 26 Nov 2026 10:04:34 +0800</pubDate>
       <guid>https://zepp7289.github.io/posts/voidtrace-promilia/</guid>
-      <description>用VoidTrace和AI简单探究</description>
+      <description>VoidTrace搭配AI协助定位到算法</description>
     </item>
     <item>
       <title>About</title>
